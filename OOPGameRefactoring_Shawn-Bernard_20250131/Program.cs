@@ -35,107 +35,9 @@ class Program
         //Console.ReadLine();
     }
 
-    public abstract class Character
-    {
-        public List<string> Deck = new List<string>();
-        int health = 100, maxHealth = 100;
-        int mana = 100, maxMana = 100;
-        int shield;
-        bool HasFireBuff;
-        bool HasIceShield;
-        public int Health
-        {
-            get => health;
-            set
-            {
-                health = Math.Max(0, Math.Min(maxHealth, value));
-            }
-        }
-    }
-    public class Player : Character
-    {
+    
 
-    }
-    public class Enemy : Character
-    {
-
-    }
-
-    public abstract class Cards
-    {
-        int damage;
-        // On the other effect check character.mana 
-        public abstract void Effects(Character Person,int effect);
-
-        public abstract void CardDescription();
-    }
-
-    public class FireBallCard : Cards
-    {
-        public override void Effects()
-        {
-            throw new NotImplementedException();
-        }
-        public override void CardDescription()
-        {
-            //"Fireball (Costs 30 mana): Deal 40 damage";
-        }
-
-    }
-    public class IceShieldCard : Cards
-    {
-        public override void Effects(Character Person, int effect)
-        {
-            throw new NotImplementedException();
-        }
-        public override void CardDescription()
-        {
-            //"Ice Shield (Costs 20 mana): Gain 30 shield and ice protection";
-        }
-
-    }
-    public class HealCard : Cards
-    {
-        public override void Effects(Character Person, int effect)//Maybe character could fit here for heals or damage
-        {
-            //Something like this maybe
-            /*
-            if (Person.Health >= 100)
-            {
-
-            }
-            */
-        }
-        public override void CardDescription()
-        {
-            //"Heal (Costs 40 mana): Restore 40 health";
-        }
-
-    }
-    public class SlashCard : Cards
-    {
-        public override void Effects(Character Person, int effect)
-        {
-            throw new NotImplementedException();
-        }
-        public override void CardDescription()
-        {
-            //"Slash (Costs 20 mana): Deal 20 damage";
-        }
-
-    }
-    public class PowerUpCard : Cards
-    {
-        public override void Effects(Character Person, int effect)
-        {
-            
-        }
-        public override void CardDescription()
-        {
-            //"Power Up (Costs 30 mana): Gain fire buff for 2 turns";
-        }
-
-    }
+    
 
 
 
@@ -144,7 +46,7 @@ class Program
     static void StartGame()
     {
         Console.WriteLine("=== Card Battle Game ===");
-        InitializeDecks();
+        //InitializeDecks();
 
         while (playerHealth > 0 && enemyHealth > 0)
         {
@@ -178,31 +80,18 @@ class Program
         Console.ReadKey();
     }
     //Can be used to create list 
+    /*
     public void MakeList<T>() where T : new()
     {
-    }
-
-
-    static void InitializeDecks()
-    {
-        // Add cards to player deck
         for (int i = 0; i < 5; i++) playerDeck.Add("FireballCard");
         for (int i = 0; i < 5; i++) playerDeck.Add("IceShieldCard");
         for (int i = 0; i < 3; i++) playerDeck.Add("HealCard");
         for (int i = 0; i < 4; i++) playerDeck.Add("SlashCard");
         for (int i = 0; i < 3; i++) playerDeck.Add("PowerUpCard");
-
-        // Add cards to enemy deck
-        for (int i = 0; i < 5; i++) enemyDeck.Add("FireballCard");
-        for (int i = 0; i < 5; i++) enemyDeck.Add("IceShieldCard");
-        for (int i = 0; i < 3; i++) enemyDeck.Add("HealCard");
-        for (int i = 0; i < 4; i++) enemyDeck.Add("SlashCard");
-        for (int i = 0; i < 3; i++) enemyDeck.Add("PowerUpCard");
-
-        // Shuffle decks
-        ShuffleDeck(playerDeck);
-        ShuffleDeck(enemyDeck);
     }
+    */
+
+    
 
     static void ShuffleDeck(List<string> deck)
     {
@@ -243,7 +132,7 @@ class Program
         Console.WriteLine("\nYour hand:");
         for (int i = 0; i < playerHand.Count; i++)
         {
-            Console.WriteLine($"{i + 1}. {GetCardDescription(playerHand[i])}");
+            Console.WriteLine($"{i + 1}. { GetCardDescription(playerHand[i])}");
         }
     }
 
@@ -265,7 +154,8 @@ class Program
 
     static void PlayTurn(bool isPlayer)
     {
-        string hand = isPlayer ? playerHand : enemyHand;
+        Random random = new Random();
+        var hand = isPlayer ? playerHand : enemyHand;
 
         if (isPlayer)
         {
