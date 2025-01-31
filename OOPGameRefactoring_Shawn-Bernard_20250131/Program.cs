@@ -6,6 +6,7 @@ using System.Threading;
 
 class Program
 {
+    /*
     //Can be made into method with something like this public void MakeList<T>() where T : new()
     static List<string> playerDeck = new List<string>();
     static List<string> playerHand = new List<string>();
@@ -27,22 +28,23 @@ class Program
     static bool enemyHasIceShield = false;
 
     static Random random = new Random();
-
+    */
+    //static GameSystem gameSystem;
     static void Main(string[] args)
     {
 
-        StartGame();
+        GameSystem.StartGame();
         //Console.ReadLine();
     }
 
+
+
+
     
 
-    
 
 
-
-
-
+    /*
     static void StartGame()
     {
         Console.WriteLine("=== Card Battle Game ===");
@@ -89,7 +91,6 @@ class Program
         for (int i = 0; i < 4; i++) playerDeck.Add("SlashCard");
         for (int i = 0; i < 3; i++) playerDeck.Add("PowerUpCard");
     }
-    */
 
     
 
@@ -417,4 +418,5 @@ class Program
             enemyMana = Math.Min(100, enemyMana + 20);
         }
     }
+    */
 }

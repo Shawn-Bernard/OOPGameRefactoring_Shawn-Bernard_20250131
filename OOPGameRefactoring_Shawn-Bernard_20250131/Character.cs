@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 public abstract class Character
 {
-    public List<Cards> Deck = new List<Cards>();
+    public List<string> Deck = new List<string>();
 
-    public List<Cards> Hand = new List<Cards>();
+    public List<string> Hand = new List<string>();
 
     int health = 100, maxHealth = 100;
 
@@ -45,10 +45,36 @@ public abstract class Character
             shield = Math.Max(0, Math.Min(maxShield, value));
         }
     }
+    public void InitializeDecks(Character entity)
+    {
+        // Add cards to player deck
+        for (int i = 0; i < 5; i++) entity.Deck.Add("FireballCard");
+        for (int i = 0; i < 5; i++) entity.Deck.Add("IceShieldCard");
+        for (int i = 0; i < 3; i++) entity.Deck.Add("HealCard");
+        for (int i = 0; i < 4; i++) entity.Deck.Add("SlashCard");
+        for (int i = 0; i < 3; i++) entity.Deck.Add("PowerUpCard");
+
+
+        // Shuffle decks
+        ShuffleDeck(entity.Deck);
+    }
+    void ShuffleDeck(List<string> deck)
+    {
+        int n = deck.Count;
+        while (n > 1)
+        {
+            n--;
+            int k = random.Next(n + 1);
+            string temp = deck[k];
+            deck[k] = deck[n];
+            deck[n] = temp;
+        }
+    }
 
 }
 public class Player : Character
 {
+
 }
 public class Enemy : Character
 {
