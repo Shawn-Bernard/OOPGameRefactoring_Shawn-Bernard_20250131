@@ -50,10 +50,8 @@ public static class GameSystem
             if (player.Health <= 0) break;
 
             // End of round effects
-            UpdateBuffs(true, enemy);
-            UpdateBuffs(false, enemy);
-            UpdateBuffs(true,player);
-            UpdateBuffs(false,player);
+            UpdateBuffs(enemy);
+            UpdateBuffs(player);
 
             Console.WriteLine("\nPress any key for next round...");
             Console.ReadKey();
@@ -90,7 +88,7 @@ public static class GameSystem
                 Console.WriteLine(choice.ToString());
                 //if (choice == 0) return;
 
-                PlayCard(hand[choice - 1], isPlayer, Entity, target);
+                PlayCard(hand[choice - 1], Entity, target);
 
                 hand.RemoveAt(choice - 1);
             }
@@ -99,7 +97,7 @@ public static class GameSystem
                 // Simple AI: randomly play a card if enough mana
                 int cardIndex = random.Next(hand.Count);
 
-                if (cardIndex == hand.Count) return ;
+                //if (cardIndex == hand.Count) return ;
 
                 string cardToPlay = hand[cardIndex];
 
@@ -108,62 +106,53 @@ public static class GameSystem
                     (cardToPlay == "IceShieldCard" && Entity.Mana >= 20) ||
                     (cardToPlay == "HealCard" && Entity.Mana >= 40) ||
                     (cardToPlay == "SlashCard" && Entity.Mana >= 20) ||
-                    (cardToPlay == "PowerUpCard" && Entity.Mana >= 30))
+                    (cardToPlay == "PowerUpCard" && Entity.Mana >= 30)||
+                    cardToPlay == "ShieldShatter" && Entity.Mana >= 40)
                 {
-                    PlayCard(cardToPlay, isPlayer, Entity, target);
+                    PlayCard(cardToPlay,Entity, target);
                     hand.RemoveAt(cardIndex);
                 }
             }
         }
-    static void PlayCard(string cardName, bool isPlayer, Character user, Character target)
+    static void PlayCard(string cardName, Character user, Character target)
     {
-        Console.WriteLine(isPlayer);
         Console.WriteLine(cardName);
+        Console.WriteLine(user.HasIceShield);
         Cards card = null;
-            if (isPlayer)
-            {
-            switch (cardName)
-            {
-                case "FireBallCard":
-                    card = new FireBallCard();
-                    card.Effects(user, target);
-                    break;
-                case "IceShieldCard":
-                    card = new IceShieldCard();
-                    card.Effects(user, target);
-                    break;
-                case "HealCard":
-                    card = new HealCard();
-                    card.Effects(user, target);
-                    break;
-                case "SlashCard":
-                    card = new SlashCard();
-                    card.Effects(user, target);
-                    break;
-                case "PowerUpCard":
-                    card = new PowerUpCard();
-                    card.Effects(user, target);
-                    break;
-            }
-                if (cardName == "FireBallCard")
-                {
+        switch (cardName)
+        {
+            case "FireBallCard":
                 card = new FireBallCard();
                 card.Effects(user, target);
-                }
-            }
-            else
-            {
+                break;
+            case "IceShieldCard":
+                card = new IceShieldCard();
+                card.Effects(user, target);
+                break;
+            case "HealCard":
+                card = new HealCard();
+                card.Effects(user, target);
+                break;
+            case "SlashCard":
+                card = new SlashCard();
+                card.Effects(user, target);
+                break;
+            case "PowerUpCard":
+                card = new PowerUpCard();
+                card.Effects(user, target);
+                break;
+            case "ShieldShatter":
+                card = new ShieldShatter();
+                card.Effects(user, target);
+                break;
+        }
 
-            }
-        }
-    static public void UpdateBuffs(bool isPlayer,Character Entity)
+    }
+    static public void UpdateBuffs(Character Entity)
     {
-        if (isPlayer)
-        {
-            if (Entity.HasFireBuff) Entity.HasFireBuff = false;
-            if (Entity.HasIceShield) Entity.HasIceShield = false;
-            Entity.Mana = Math.Min(100, Entity.Mana + 20);
-        }
+        if (Entity.HasFireBuff) Entity.HasFireBuff = false;
+        if (Entity.HasIceShield) { } //Entity.HasIceShield;
+        Entity.Mana += 20;
     }
 } 
 

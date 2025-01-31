@@ -4,9 +4,11 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 public abstract class Cards
 {
+    public int manaCost;
     // On the other effect check character.mana 
     public abstract void Effects(Character user, Character target);
 
@@ -16,20 +18,28 @@ public abstract class Cards
 public class FireBallCard : Cards
 {
     int damage = 40;
+    
     public override void Effects(Character user, Character target)
     {
-        if (user.Mana < 30)
+        manaCost = 30;
+        if (user.Mana < manaCost)
         {
             return;
         }
         else
         {
+            user.Mana -= manaCost;
             if (user.HasFireBuff) damage *= 2;
-            if (target.HasIceShield) damage /= 2;
-
-            target.Health -= damage;
-            user.Mana -= 30;
             Console.WriteLine($"{user} casts Fireball for {damage} damage!");
+            if (target.HasIceShield)
+            {
+                target.Shield -= damage;
+            }
+            else
+            {
+                target.Health -= damage;
+            }
+            
         }
     }
 
@@ -42,15 +52,15 @@ public class IceShieldCard : Cards
 {
     public override void Effects(Character user, Character target)
     {
-        if (user.Mana < 20)
+        manaCost = 20;
+        if (user.Mana < manaCost)
         {
             return;
         }
         else
         {
-
             user.Shield += 30;
-            user.HasIceShield = true;
+            //user.HasIceShield = true;
             user.Mana -= 20;
             Console.WriteLine($"{user} gains Ice Shield!");
         }
@@ -62,16 +72,16 @@ public class IceShieldCard : Cards
 }
 public  class HealCard : Cards
 {
-    int damage = 40;
     public override void Effects(Character user, Character target)//Maybe character could fit here for heals or damage
     {
+        manaCost = 40;
         if (user.Mana < 40)
         {
             return;
         }
         else
         {
-
+            
             user.Health += 40;
             user.Mana -= 40;
             Console.WriteLine($"{user} heals 40 health!");
@@ -87,6 +97,7 @@ public class SlashCard : Cards
     int damage = 20;
     public override void Effects(Character user, Character target)
     {
+        manaCost = 20;
         if (user.Mana < 20)
         {
             return;
@@ -95,19 +106,14 @@ public class SlashCard : Cards
         {
 
             if (user.HasFireBuff) damage *= 2;
-
-            if (target.Shield > 0)
+            user.Mana -= 20;
+            if (target.HasIceShield)
             {
-                if (target.Shield >= damage)
-                {
-                    target.Shield -= damage;
-                    damage = 0;
-                }
-                else
-                {
-                    damage -= target.Shield;
-                    target.Shield = 0;
-                }
+                target.Shield -= damage;
+            }
+            else
+            {
+                target.Health -= damage;
             }
         }
     }
@@ -121,21 +127,54 @@ public  class PowerUpCard : Cards
 {
     public override void Effects(Character user, Character target)
     {
-        if (user.Mana < 30)
+        manaCost = 30;
+        if (user.Mana < manaCost)
         {
-            Console.WriteLine("Not enough mana!");
             return;
         }
         else
         {
 
             user.HasFireBuff = true;
-            user.Mana -= 30;
+            user.Mana -= manaCost;
             Console.WriteLine($"{user} gains Fire Buff!");
         }
     }
     public override string GetCardDescription()
     {
         return "Power Up (Costs 30 mana): Gain fire buff for 2 turns";
+    }
+}
+public class ShieldShatter : Cards
+{
+    public override void Effects(Character user, Character target)
+    {
+        manaCost = 40;
+        if (user.Mana < manaCost)
+        {
+            return;
+        }
+        else
+        {
+            int damage = user.Shield;
+
+            if (user.HasFireBuff) damage *= 2;
+            user.Mana -= manaCost;
+            user.Shield = 0;
+            //user.HasIceShield;
+            if (target.HasIceShield)
+            {
+                target.Shield -= damage;
+            }
+            else
+            {
+                target.Health -= damage;
+            }
+        }
+    }
+
+    public override string GetCardDescription()
+    {
+        return "Shield Shatter (Costs 40 mana): Deal Damage = Shield & destroy shield";
     }
 }

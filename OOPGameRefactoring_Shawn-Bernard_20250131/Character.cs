@@ -18,9 +18,16 @@ public abstract class Character
 
     public bool HasFireBuff;
 
-    public bool HasIceShield;
-
     Random random = new Random();
+
+    public bool HasIceShield
+    {
+        get { if (shield > 0)
+                return true;
+            else 
+                return false;
+            }
+    }
     public int Health
     {
         get => health;
@@ -53,6 +60,7 @@ public abstract class Character
         for (int i = 0; i < 3; i++) entity.Deck.Add("HealCard");
         for (int i = 0; i < 4; i++) entity.Deck.Add("SlashCard");
         for (int i = 0; i < 3; i++) entity.Deck.Add("PowerUpCard");
+        for (int i = 0; i < 3; i++) entity.Deck.Add("ShieldShatter");
 
 
         // Shuffle decks
