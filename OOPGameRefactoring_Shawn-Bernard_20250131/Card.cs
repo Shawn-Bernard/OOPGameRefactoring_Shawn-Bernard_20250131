@@ -1,36 +1,45 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
 
-public abstract class Cards
+public abstract class Card
 {
     public int manaCost;
-    // On the other effect check character.mana 
+
+    public Card(int Cost)
+    {
+        manaCost = Cost;
+    }
+    
+    // Making a method to be override in my other cards
     public abstract void Effects(Character user, Character target);
 
+    // Same here
     public abstract string GetCardDescription();
 }
 
-public class FireBallCard : Cards
+public class FireBallCard : Card
 {
     int damage = 40;
-    
+
+    public FireBallCard(int Cost) : base(Cost)
+    {
+        manaCost = Cost;
+    }
+
     public override void Effects(Character user, Character target)
     {
-        manaCost = 30;
         if (user.Mana < manaCost)
         {
+            Console.WriteLine("Not enough mana");
             return;
         }
         else
         {
             user.Mana -= manaCost;
+
             if (user.HasFireBuff) damage *= 2;
+
             Console.WriteLine($"{user} casts Fireball for {damage} damage!");
+
             if (target.HasIceShield)
             {
                 target.Shield -= damage;
@@ -39,7 +48,6 @@ public class FireBallCard : Cards
             {
                 target.Health -= damage;
             }
-            
         }
     }
 
@@ -48,13 +56,18 @@ public class FireBallCard : Cards
             return "Fireball (Costs 30 mana): Deal 40 damage";
     }
 }
-public class IceShieldCard : Cards
+public class IceShieldCard : Card
 {
+    public IceShieldCard(int Cost) : base(Cost)
+    {
+        manaCost = Cost;
+    }
+
     public override void Effects(Character user, Character target)
     {
-        manaCost = 20;
         if (user.Mana < manaCost)
         {
+            Console.WriteLine("Not enough mana");
             return;
         }
         else
@@ -70,13 +83,18 @@ public class IceShieldCard : Cards
        return "Ice Shield (Costs 20 mana): Gain 30 shield and ice protection";
     }
 }
-public  class HealCard : Cards
+public  class HealCard : Card
 {
+    public HealCard(int Cost) : base(Cost)
+    {
+        manaCost = Cost;
+    }
+
     public override void Effects(Character user, Character target)//Maybe character could fit here for heals or damage
     {
-        manaCost = 40;
         if (user.Mana < 40)
         {
+            Console.WriteLine("Not enough mana");
             return;
         }
         else
@@ -92,14 +110,20 @@ public  class HealCard : Cards
         return "Heal (Costs 40 mana): Restore 40 health";
     }
 }
-public class SlashCard : Cards
+public class SlashCard : Card
 {
     int damage = 20;
+
+    public SlashCard(int Cost) : base(Cost)
+    {
+        manaCost = Cost;
+    }
+
     public override void Effects(Character user, Character target)
     {
-        manaCost = 20;
-        if (user.Mana < 20)
+        if (user.Mana < manaCost)
         {
+            Console.WriteLine("Not enough mana");
             return;
         }
         else
@@ -123,19 +147,24 @@ public class SlashCard : Cards
     }
 
 }
-public  class PowerUpCard : Cards
+public class PowerUpCard : Card
 {
+    public PowerUpCard(int Cost ) : base(Cost)
+    {
+        manaCost = Cost;
+    }
+
     public override void Effects(Character user, Character target)
     {
-        manaCost = 30;
         if (user.Mana < manaCost)
         {
+            Console.WriteLine("Not enough mana");
             return;
         }
         else
         {
 
-            user.HasFireBuff = true;
+            user.BuffDuration += 3;
             user.Mana -= manaCost;
             Console.WriteLine($"{user} gains Fire Buff!");
         }
@@ -145,17 +174,24 @@ public  class PowerUpCard : Cards
         return "Power Up (Costs 30 mana): Gain fire buff for 2 turns";
     }
 }
-public class ShieldShatter : Cards
+public class ShieldShatterCard : Card
 {
+    public ShieldShatterCard(int Cost) : base(Cost)
+    {
+        manaCost = Cost;
+    }
+
     public override void Effects(Character user, Character target)
     {
-        manaCost = 40;
         if (user.Mana < manaCost)
         {
+            Console.WriteLine("Not enough mana");
             return;
         }
         else
         {
+
+
             int damage = user.Shield;
 
             if (user.HasFireBuff) damage *= 2;
