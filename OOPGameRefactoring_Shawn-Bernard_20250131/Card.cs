@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 
 public abstract class Card
 {
@@ -10,23 +11,25 @@ public abstract class Card
     }
     
     // Making a method to be override in my other cards
+    // Also since the cards all have an effect
     public abstract void Effects(Character user, Character target);
 
-    // Same here
+    // Same thing with here
     public abstract string GetCardDescription();
 }
 
 public class FireBallCard : Card
 {
     int damage = 40;
-
+    // This is inheriting from the base cost tbh I didn't know you could do this
     public FireBallCard(int Cost) : base(Cost)
     {
         manaCost = Cost;
     }
-
+    // I put the user here since the user could be anyone and same with the target
     public override void Effects(Character user, Character target)
     {
+        // this would check the if the user has enough mana and returns with writeline 
         if (user.Mana < manaCost)
         {
             Console.WriteLine("Not enough mana");
@@ -34,6 +37,7 @@ public class FireBallCard : Card
         }
         else
         {
+            // Taking away the user mana
             user.Mana -= manaCost;
 
             if (user.HasFireBuff) damage *= 2;
@@ -163,7 +167,7 @@ public class PowerUpCard : Card
         }
         else
         {
-
+            // Adding 3 turn for a real 2 turn buff, because every round take buff duration away 
             user.BuffDuration += 3;
             user.Mana -= manaCost;
             Console.WriteLine($"{user} gains Fire Buff!");
@@ -191,13 +195,13 @@ public class ShieldShatterCard : Card
         else
         {
 
-
+            // Making a new local int damage equal to the user shield
             int damage = user.Shield;
-
+            //Checking if the user has the buff
             if (user.HasFireBuff) damage *= 2;
             user.Mana -= manaCost;
             user.Shield = 0;
-            //user.HasIceShield;
+            // Find out where to take from
             if (target.HasIceShield)
             {
                 target.Shield -= damage;

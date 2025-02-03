@@ -51,14 +51,12 @@ public static class GameSystem
     }
     static public void DrawCards(Character entity)
     {
-        if (entity.Hand.Count < 3)
-            while (entity.Hand.Count < 3 && entity.Deck.Count > 0)
-
-            {
+        // While the entity hand count is less than 3 and the deck count is greater than 0 you can pull 
+        while (entity.Hand.Count < 3 && entity.Deck.Count > 0)
+        {
             entity.Hand.Add(entity.Deck[0]);
             entity.Deck.RemoveAt(0);
-            }
-
+        }
     }
     public static void InitializeDecks(Character entity)
     {
@@ -89,6 +87,7 @@ public static class GameSystem
         Console.WriteLine("\nYour hand:");
         for (int i = 0; i < player.Hand.Count; i++)
         {
+            // To get this to work I thought about it like fireballcard.GetCardDescription from the card list
             Console.WriteLine($"{i + 1}. {player.Hand[i].GetCardDescription()}");
         }
     }
@@ -107,7 +106,7 @@ public static class GameSystem
                 Console.WriteLine(choice.ToString());
                 if (choice == 0) return;
 
-                // Use the cards effect on the player (target)
+                // Use the cards effect on the enemy (target)
                 hand[choice -1].Effects(User,target);
 
                 hand.RemoveAt(choice - 1);
